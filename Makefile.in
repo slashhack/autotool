@@ -336,7 +336,8 @@ SUBDIRS = \
 	include \
 	src \
 	script \
-	python
+	data \
+	etc
 
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive

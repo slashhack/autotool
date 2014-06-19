@@ -16931,7 +16931,7 @@ done
 
 # Checks for library functions.
 
-ac_config_files="$ac_config_files Makefile include/Makefile src/Makefile script/Makefile python/Makefile"
+ac_config_files="$ac_config_files Makefile include/Makefile src/Makefile script/Makefile script/python/Makefile script/util/Makefile data/Makefile etc/Makefile"
 
 
 
@@ -18079,7 +18079,10 @@ do
     "include/Makefile") CONFIG_FILES="$CONFIG_FILES include/Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
     "script/Makefile") CONFIG_FILES="$CONFIG_FILES script/Makefile" ;;
-    "python/Makefile") CONFIG_FILES="$CONFIG_FILES python/Makefile" ;;
+    "script/python/Makefile") CONFIG_FILES="$CONFIG_FILES script/python/Makefile" ;;
+    "script/util/Makefile") CONFIG_FILES="$CONFIG_FILES script/util/Makefile" ;;
+    "data/Makefile") CONFIG_FILES="$CONFIG_FILES data/Makefile" ;;
+    "etc/Makefile") CONFIG_FILES="$CONFIG_FILES etc/Makefile" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac

@@ -5,4 +5,5 @@ SUBDIRS = \
 	include \
 	src \
 	script \
-	python
+	data \
+	etc

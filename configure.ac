@@ -47,7 +47,10 @@ AC_CONFIG_FILES([
         include/Makefile
         src/Makefile
         script/Makefile
-        python/Makefile
+        script/python/Makefile
+        script/util/Makefile
+        data/Makefile
+        etc/Makefile
         ])
 
 
