@@ -24,8 +24,8 @@ AC_PROG_INSTALL
 AC_PROG_LN_S
 AC_PROG_MAKE_SET
 
-AC_PROG_CC_STDC
-AX_CXX_COMPILE_STDCXX_11
+#AC_PROG_CC_STDC
+#AX_CXX_COMPILE_STDCXX_11
 
 AM_PATH_PYTHON([3.0])
 
@@ -34,6 +34,8 @@ AM_PATH_PYTHON([3.0])
 #add profile-guided optimization
 
 # Checks for libraries.
+AC_CHECK_LIB([dl], [dlopen])
+AC_CHECK_LIB([rt], [nanosleep])
 
 # Checks for header files.
 AC_CHECK_HEADERS([stdlib.h string.h])
@@ -60,11 +62,11 @@ AC_ARG_ENABLE([debug],
         [enable debug code (default is no)])],
         [debug="$withval"], [debug=no])
 
-# Configure options: --enable-optimize[=no].
-AC_ARG_ENABLE([optimize],
-        [AS_HELP_STRING([--enable-optimize],
-        [enable optimize code (default is no)])],
-        [optimize="$withval"], [optimize=no])
+# Configure options: --enable-release[=no].
+AC_ARG_ENABLE([release],
+        [AS_HELP_STRING([--enable-release],
+        [enable release code (default is no)])],
+        [release="$withval"], [release=no])
 
 # Configure options: --enable-profile[=no].
 AC_ARG_ENABLE([profile],
@@ -72,7 +74,60 @@ AC_ARG_ENABLE([profile],
         [enable profile code (default is no)])],
         [profile="$withval"], [profile=no])
 
-        
+GCC_COMMON_OPTION=""
+GCC_COMMON_OPTION+=" -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-align "
+GCC_COMMON_OPTION+=" -Wwrite-strings -Wconversion -Wfloat-equal -Wpointer-arith "
+GCC_COMMON_OPTION+=" -Wswitch-enum -rdynamic "
+
+LDFLAGS="-lrt -ldl"
+
+#CFLAGS="$GCC_COMMON_OPTION"
+#CXXFLAGS="$GCC_COMMON_OPTION"
+
+# add libmudflap
+# -g -fmudflap for compiler, -lmudflap for linker
+# elf and dwarf information to debug build
+
+# release : O3 native optimize
+# default : -g O2 ..
+# debug   : -g3 -O0 ...
+
+if test $debug = yes ; then
+    GCC_COMMON_OPTION+=" -g3 -O0 -ftrapv -fstack-protector "
+    CFLAGS="$GCC_COMMON_OPTION"
+    CXXFLAGS="$GCC_COMMON_OPTION -Weffc++"
+else
+    if test $release = yes ; then
+        GCC_COMMON_OPTION+=" -g0 -O3 -march=native -mtune=native"
+        CFLAGS="$GCC_COMMON_OPTION"
+        CXXFLAGS="$GCC_COMMON_OPTION -Weffc++"
+    else
+        GCC_COMMON_OPTION+=" -g -O2 -ftrapv -fstack-protector -D_FORTIFY_SOURCE=2 "
+        CFLAGS="$GCC_COMMON_OPTION"
+        CXXFLAGS="$GCC_COMMON_OPTION -Weffc++"
+    fi
+fi
+# if debug
+#   ...
+# else
+#  if release
+#     ...
+#  else
+#     ...
+# done
+
+# if profile
+#   ...
+
+#AC_SUBST(CFLAGS)
+#AC_SUBST(CXXFLAGS)
+#AC_SUBST(LDFLAGS)
+
+# TODO
+CC="$CC -std=c99 "
+CXX="$CXX -std=c++11"
+
+
 AC_OUTPUT
 
 echo "
@@ -82,5 +137,5 @@ echo "
      Profile Build..: $profile
      C   Compiler...: $CC  $CFLAGS   $CPPFLAGS
      C++ Compiler...: $CXX $CXXFLAGS $CPPFLAGS
-     Linker.........: $LD $LDFLAGS $LIBS
+     Linker.........: $LD $LDFLAGS 
 "
