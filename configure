@@ -16495,9 +16495,9 @@ _ACEOF
 
 fi
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for nanosleep in -lrt" >&5
-$as_echo_n "checking for nanosleep in -lrt... " >&6; }
-if ${ac_cv_lib_rt_nanosleep+:} false; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for clock_gettime in -lrt" >&5
+$as_echo_n "checking for clock_gettime in -lrt... " >&6; }
+if ${ac_cv_lib_rt_clock_gettime+:} false; then :
   $as_echo_n "(cached) " >&6
 else
   ac_check_lib_save_LIBS=$LIBS
@@ -16511,27 +16511,27 @@ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 #ifdef __cplusplus
 extern "C"
 #endif
-char nanosleep ();
+char clock_gettime ();
 int
 main ()
 {
-return nanosleep ();
+return clock_gettime ();
   ;
   return 0;
 }
 _ACEOF
 if ac_fn_c_try_link "$LINENO"; then :
-  ac_cv_lib_rt_nanosleep=yes
+  ac_cv_lib_rt_clock_gettime=yes
 else
-  ac_cv_lib_rt_nanosleep=no
+  ac_cv_lib_rt_clock_gettime=no
 fi
 rm -f core conftest.err conftest.$ac_objext \
     conftest$ac_exeext conftest.$ac_ext
 LIBS=$ac_check_lib_save_LIBS
 fi
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_rt_nanosleep" >&5
-$as_echo "$ac_cv_lib_rt_nanosleep" >&6; }
-if test "x$ac_cv_lib_rt_nanosleep" = xyes; then :
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_rt_clock_gettime" >&5
+$as_echo "$ac_cv_lib_rt_clock_gettime" >&6; }
+if test "x$ac_cv_lib_rt_clock_gettime" = xyes; then :
   cat >>confdefs.h <<_ACEOF
 #define HAVE_LIBRT 1
 _ACEOF
@@ -16542,7 +16542,7 @@ fi
 
 
 # Checks for header files.
-for ac_header in stdlib.h string.h
+for ac_header in float.h inttypes.h limits.h stdint.h stdlib.h string.h
 do :
   as_ac_Header=`$as_echo "ac_cv_header_$ac_header" | $as_tr_sh`
 ac_fn_c_check_header_mongrel "$LINENO" "$ac_header" "$as_ac_Header" "$ac_includes_default"
@@ -16557,8 +16557,61 @@ done
 
 
 # Checks for typedefs, structures, and compiler characteristics.
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for inline" >&5
+$as_echo_n "checking for inline... " >&6; }
+if ${ac_cv_c_inline+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_cv_c_inline=no
+for ac_kw in inline __inline__ __inline; do
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+#ifndef __cplusplus
+typedef int foo_t;
+static $ac_kw foo_t static_foo () {return 0; }
+$ac_kw foo_t foo () {return 0; }
+#endif
+
+_ACEOF
+if ac_fn_c_try_compile "$LINENO"; then :
+  ac_cv_c_inline=$ac_kw
+fi
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+  test "$ac_cv_c_inline" != no && break
+done
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_c_inline" >&5
+$as_echo "$ac_cv_c_inline" >&6; }
+
+case $ac_cv_c_inline in
+  inline | yes) ;;
+  *)
+    case $ac_cv_c_inline in
+      no) ac_val=;;
+      *) ac_val=$ac_cv_c_inline;;
+    esac
+    cat >>confdefs.h <<_ACEOF
+#ifndef __cplusplus
+#define inline $ac_val
+#endif
+_ACEOF
+    ;;
+esac
+
 
 # Checks for library functions.
+for ac_func in clock_gettime
+do :
+  ac_fn_c_check_func "$LINENO" "clock_gettime" "ac_cv_func_clock_gettime"
+if test "x$ac_cv_func_clock_gettime" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_CLOCK_GETTIME 1
+_ACEOF
+
+fi
+done
+
 
 ac_config_files="$ac_config_files Makefile include/Makefile src/Makefile script/Makefile script/python/Makefile script/util/Makefile data/Makefile etc/Makefile"
 
@@ -16596,7 +16649,7 @@ GCC_COMMON_OPTION+=" -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-align "
 GCC_COMMON_OPTION+=" -Wwrite-strings -Wconversion -Wfloat-equal -Wpointer-arith "
 GCC_COMMON_OPTION+=" -Wswitch-enum -rdynamic "
 
-LDFLAGS="-lrt -ldl"
+#LIBS="-lrt -ldl"
 
 #CFLAGS="$GCC_COMMON_OPTION"
 #CXXFLAGS="$GCC_COMMON_OPTION"
@@ -16643,7 +16696,6 @@ fi
 # TODO
 CC="$CC -std=c99 "
 CXX="$CXX -std=c++11"
-
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -19296,5 +19348,5 @@ echo "
      Profile Build..: $profile
      C   Compiler...: $CC  $CFLAGS   $CPPFLAGS
      C++ Compiler...: $CXX $CXXFLAGS $CPPFLAGS
-     Linker.........: $LD $LDFLAGS
+     Linker.........: $LD $LDFLAGS $LIBS
 "

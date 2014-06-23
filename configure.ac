@@ -35,14 +35,16 @@ AM_PATH_PYTHON([3.0])
 
 # Checks for libraries.
 AC_CHECK_LIB([dl], [dlopen])
-AC_CHECK_LIB([rt], [nanosleep])
+AC_CHECK_LIB([rt], [clock_gettime])
 
 # Checks for header files.
-AC_CHECK_HEADERS([stdlib.h string.h])
+AC_CHECK_HEADERS([float.h inttypes.h limits.h stdint.h stdlib.h string.h])
 
 # Checks for typedefs, structures, and compiler characteristics.
+AC_C_INLINE
 
 # Checks for library functions.
+AC_CHECK_FUNCS([clock_gettime])
 
 AC_CONFIG_FILES([
         Makefile
@@ -79,7 +81,7 @@ GCC_COMMON_OPTION+=" -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-align "
 GCC_COMMON_OPTION+=" -Wwrite-strings -Wconversion -Wfloat-equal -Wpointer-arith "
 GCC_COMMON_OPTION+=" -Wswitch-enum -rdynamic "
 
-LDFLAGS="-lrt -ldl"
+#LIBS="-lrt -ldl"
 
 #CFLAGS="$GCC_COMMON_OPTION"
 #CXXFLAGS="$GCC_COMMON_OPTION"
@@ -127,7 +129,6 @@ fi
 CC="$CC -std=c99 "
 CXX="$CXX -std=c++11"
 
-
 AC_OUTPUT
 
 echo "
@@ -137,5 +138,5 @@ echo "
      Profile Build..: $profile
      C   Compiler...: $CC  $CFLAGS   $CPPFLAGS
      C++ Compiler...: $CXX $CXXFLAGS $CPPFLAGS
-     Linker.........: $LD $LDFLAGS 
+     Linker.........: $LD $LDFLAGS $LIBS 
 "
