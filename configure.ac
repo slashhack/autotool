@@ -81,11 +81,6 @@ GCC_COMMON_OPTION+=" -Wall -Wextra -Wformat=2 -Wstrict-aliasing=2 -Wcast-align "
 GCC_COMMON_OPTION+=" -Wwrite-strings -Wconversion -Wfloat-equal -Wpointer-arith "
 GCC_COMMON_OPTION+=" -Wswitch-enum -rdynamic "
 
-#LIBS="-lrt -ldl"
-
-#CFLAGS="$GCC_COMMON_OPTION"
-#CXXFLAGS="$GCC_COMMON_OPTION"
-
 # add libmudflap
 # -g -fmudflap for compiler, -lmudflap for linker
 # elf and dwarf information to debug build
@@ -109,25 +104,9 @@ else
         CXXFLAGS="$GCC_COMMON_OPTION -Weffc++"
     fi
 fi
-# if debug
-#   ...
-# else
-#  if release
-#     ...
-#  else
-#     ...
-# done
 
-# if profile
-#   ...
-
-#AC_SUBST(CFLAGS)
-#AC_SUBST(CXXFLAGS)
-#AC_SUBST(LDFLAGS)
-
-# TODO
-CC="$CC -std=c99 "
-CXX="$CXX -std=c++11"
+CFLAGS="-std=c99 $CFLAGS"
+CXXFLAGS="-std=c++11 $CXXFLAGS"
 
 AC_OUTPUT
 
